@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>La Femme de l'Aviateur Filmic Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<script src="https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js"></script>
+<link href="https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css" rel="stylesheet" />
+   <!-- <link href="./css/ride.css" rel="stylesheet" />-->
+     <!--[if lte IE 8]>
+    <link href='//api.tiles.mapbox.com/mapbox.js/v1.3.0/mapbox.ie.css' rel='stylesheet'>
+  <![endif]-->
+<script src="./js/bus26.json"></script>
+<style>
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:0; bottom:0; width:100%; }
+    
+    .legend label,
+.legend span {
+  display:block;
+    float:left;
+  height:15px;
+  width:20%;
+  text-align:center;
+  font-size:9px;
+  color:#808080;
+  }
+</style>
+    <div id="legend" style="display:none;">
+  <strong>La femme de l'aviateur</strong> (The Aviator's Wife)<br>&#8226;1981 - Director and Writer: <strong>Éric Rohmer</strong><br>&#8226;Scene of bus 26 ride, Paris<br>
+    <nav class="legend clearfix">
+    <span style="background:#f42;"></span>
+    <span style="background:#db2;"></span>
+    <span style="background:#7a3;"></span>
+    <span style="background:#39e;"></span>
+    <span style=""></span>
+    <label>Bus 26</label>
+    <label>Roads</label>
+    <label>Parks</label>
+    <label>Canal</label>    
+    <label></label>
+    <label></label>  
+        </nav>   
+      </div>
+<link rel="canonical" href="index.html" >
+</head>
+<body>
+<div id="map"></div>
+<style>
+    .leaflet-popup-content-wrapper {width: 427px; height: 277px; max-width: 80vw; margin: 0; background-color: transparent; border-radius: 16px; border: solid #00060A; box-shadow: -6px 8px 40px 8px #300;}
+</style>
+<script>
+L.mapbox.accessToken = 'pk.eyJ1IjoibWV0cm93YXZlIiwiYSI6ImNqOG85dWNsNzAxM2gycW8zZnA5aTVnZGsifQ.WTHsnGeQiL5XNVmyppgrtg';
+var map = L.mapbox.map('map', '',{closePopupOnClick:false})
+    .setView([48.8808881379255, 2.3737952113151555], 16);
+    
+var styleLayer = L.mapbox.styleLayer('mapbox://styles/metrowave/cjsqxrmwr1llz1fqsx3jc5k14')
+    .addTo(map);
+    
+  map.legendControl.addLegend(document.getElementById('legend').innerHTML);
+    
+    
+function style(feature) {
+    return {
+        weight: 6,
+        opacity: 1,
+        color: '#f42',
+        opacity:0.6
+    };
+}
+    
+var line = L.geoJson(ride, {
+    style:style
+}).addTo(map);
+
+var marker = L.marker([0, 0], {
+    icon: L.mapbox.marker.icon({
+        type: 'Feature',
+       geometry: {
+        type: 'Point',
+        coordinates: [2.3737952113151555,48.8808881379255]
+        },
+        properties: {
+        'marker-symbol': 'star',
+        } 
+    })
+}).addTo(map)
+  
+  var coords = ride.features[0].geometry.coordinates,
+    i = 0;
+
+  function tick() {
+    marker.setLatLng([coords[i][1], coords[i][0]]);
+    map.setView([coords[i][1], coords[i][0]], 16);
+    if (++i < coords.length) setTimeout(tick, 540);
+  }
+tick(); 
+   
+    
+  marker.bindPopup('<video src="./film/Paris-bus26.mp4" type="video/mp4" autoplay muted playsinline controls="true" width="400px" height="240px" style=" border-radius: 16px; max-width: 71vw; margin: 0; overflow: hidden; position: relative"><source src="./film/ride_6.mp4" type="video/mp4"></source></video>',{
+      keepInView:false,
+      autoPan:false,
+      closeButton:true,
+      maxWidth:400,
+  }).openPopup();
+    
+  marker._popup.setLatLng = function(latlng) {
+      this._latlng = L.latLng(latlng);
+      this._updatePosition();
+      this._adjustPan();
+  }
+</script>
+   
+</body>
+</html>
