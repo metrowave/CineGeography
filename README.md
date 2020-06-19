@@ -1,5 +1,5 @@
 # CineGeography
 The Aviator's Wife snippet clip animated in mapbox JS. 
-http://expressivespace.org/cinegeography/
+https://expressivespace.org/cinegeography/
 
 ![](images/Aviator'sWife.png)
